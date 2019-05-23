@@ -15,23 +15,23 @@ Regresi linear adalah model statistik yang dipergunakan untuk mengetahui pengaru
 ### Import and understand the data
 ```{r}
 #Mengimport Data.
-datagaji = read.csv('Salary_Data.csv')
+DataPenggunaOKCLEAN = read.csv('PenggunaOKCLEAN.csv')
 
 #Melihat Attribute dan Struktur Data.
-names(datagaji)
-str(datagaji)
+names(DataPenggunaOKCLEAN)
+str(DataPenggunaOKCLEAN)
 ```
-Tahap pertama adalah mengimport dan mempelajari tipe dan struktur data. Dapat dilihat bahwa data hanya memiliki 2 attribute yaitu YearsExperience dan Salary. Kedua attribute tersebut bertipe numeric.
+Tahap pertama adalah mengimport dan mempelajari tipe dan struktur data. Dapat dilihat bahwa data hanya memiliki 2 attribute yaitu HariPromosi dan JumlahPengguna. Kedua attribute tersebut bertipe numeric.
 
 
 ### Creating Linear Regression Model
-Dalam praktek kali ini kita akan membuat model regresi linear untuk memprediksi nilai gaji(salary) berdasarkan waktu pengalaman bekerja (Years Experience). 
+Dalam praktek kali ini kita akan membuat model regresi linear untuk memprediksi jumlah pengguna OK CLEAN (JumlahPengguna) berdasarkan jumlah hari promosi (HariPromosi). 
 ```{r}
 # Membuat model 
 # lm([target attribute] ~ [predictor attributes], data = [data source])
 set.seed(1234)
-linearmodel = lm(Salary ~ YearsExperience,
-               data = datagaji)
+linearmodel = lm(JumlahPengguna ~ HariPromosi,
+               data = DataPenggunaOKCLEAN)
 
 #Melihat model yang dibuat. 
 linearmodel
@@ -43,10 +43,10 @@ summary(linearmodel)
 Dari hasil diatas, kita dapat melihat bahwa persaman regresi linear dari model tersebut adalah,
 
 ```{r}
-# Salary = Intercept + (Slope*Years Experience)
+# PenggunaOKCLEAN = Intercept + (Slope*HariPromosi)
 ```
 
-Contoh kasus, bila ada pekerja telah memiliki pengalaman bekerja selama 2 tahun,  nilai intercept = 25792, dan nilai Slope (YearsExperience) = 9450, dapat diprediksi bahwa gaji dari pegawai tersebut berkisar 25792+(9450*2) = 44.692. 
+Contoh kasus, bila telah dilakukan promosi pada hari ke-100,  nilai intercept = 28.91, dan nilai Slope (HariPromosi) = 137.13, dapat diprediksi bahwa jumlah pengguna tersebut berkisar 28.91+(137.13*100) = 13741.91. 
 
 #### Residual
 Salah satu cara untuk menguji kualitas kesesuaian model regressi adalah dengan melihat nilai residual atau perbedaan antara nilai riil dan nilai prediksi. Model yang bagus memiliki nilai residu yang kecil (mendekati nol). 
@@ -76,7 +76,21 @@ plot(linearmodel)
 ### Model Visualization
 ```{r}
 #Memvisualisasikan Model Linear Regression
-plot(datagaji, pch = 16, col = "blue") 
+plot(DataPenggunaOKCLEAN, pch = 16, col = "blue") 
 abline(linearmodel)
 
+```
+
+
+### Prediksi Jumlah Pengguna Setelah 120 hari Promosi
+```{r}
+
+#menemukan model LM untuk jumlah pengguna setelah 120 hari promosi (hari ke-121 - 130)
+
+JumlahPenggunaSetelahHarike120 = linearmodel$coefficients[[1]] +
+  linearmodel$coefficients[[2]]*(121:130)
+
+#melihat jumlah pengguna pada hari ke-121 - 130
+
+JumlahPenggunaSetelahHarike120
 ```
